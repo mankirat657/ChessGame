@@ -1,0 +1,476 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#board {
+    width: 80vh;
+    height: 80vh;
+    background-color: rgb(34, 34, 34);
+    display: grid;
+    grid-template-rows: repeat(8, minmax(0, 1fr));
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.whiteColor {
+    position: relative;
+
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            #ffffff 0%,
+            #fff9ed 25%,
+            #e8d9c3 65%,
+            #b9a58c 100%
+        );
+
+    color: #fffdf6;
+
+    border: 2px solid #fff5df;
+    border-radius: 12px;
+
+    text-shadow:
+        0 1px 1px #8b7861,
+        0 3px 5px rgba(65, 48, 30, 0.65),
+        0 0 12px rgba(255, 255, 255, 0.8);
+
+    box-shadow:
+        inset 2px 3px 5px rgba(255,255,255,0.95),
+        inset -3px -4px 8px rgba(100,75,45,0.3),
+        0 5px 0 #a18c72,
+        0 8px 15px rgba(0,0,0,0.45);
+
+    transition: all 0.25s ease;
+}
+
+.redColor {
+    position: relative;
+
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            #ff7777 0%,
+            #c00000 25%,
+            #790000 65%,
+            #290000 100%
+        );
+
+    color: #fff1e9;
+
+    border: 2px solid #e05b5b;
+    border-radius: 12px;
+
+    text-shadow:
+        0 1px 2px #300000,
+        0 3px 5px rgba(0,0,0,0.8),
+        0 0 12px rgba(255,80,80,0.55);
+
+    box-shadow:
+        inset 2px 3px 5px rgba(255,150,150,0.4),
+        inset -3px -4px 8px rgba(0,0,0,0.65),
+        0 5px 0 #490000,
+        0 8px 15px rgba(0,0,0,0.55);
+
+    transition: all 0.25s ease;
+}
+
+/* Hover effects */
+.whiteColor:hover {
+    transform: translateY(-4px) scale(1.06);
+
+    box-shadow:
+        inset 2px 3px 5px rgba(255,255,255,0.95),
+        0 7px 0 #a18c72,
+        0 12px 22px rgba(255,255,255,0.2);
+}
+
+.redColor:hover {
+    transform: translateY(-4px) scale(1.06);
+
+    box-shadow:
+        inset 2px 3px 5px rgba(255,150,150,0.4),
+        0 7px 0 #490000,
+        0 12px 22px rgba(255,0,0,0.25);
+}
+.whiteColor:hover,
+.redColor:hover {
+    transform: translateY(-3px) scale(1.05);
+    filter: brightness(1.12);
+    cursor: pointer;
+}
+
+#board>div {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#board img {
+    width: 75%;
+    height: 75%;
+    object-fit: contain;
+    display: block;
+}
+
+.gridItems {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.pawn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}
+
+.pawnOp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}
+
+.pawn img,
+.pawnOp img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    padding: 5px;
+
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+
+    user-select: none;
+    pointer-events: none;
+}
+
+/* White chess pieces */
+.pawn img {
+    filter:
+        drop-shadow(0 2px 1px rgba(255,255,255,0.8))
+        drop-shadow(0 5px 3px rgba(0,0,0,0.45))
+        drop-shadow(0 0 5px rgba(255,255,255,0.25));
+}
+
+/* Red / opponent chess pieces */
+.pawnOp img {
+    filter:
+        invert(1)
+        drop-shadow(0 2px 1px rgba(255,100,100,0.6))
+        drop-shadow(0 5px 3px rgba(0,0,0,0.65))
+        drop-shadow(0 0 6px rgba(255,0,0,0.3));
+}
+
+/* Hover animation */
+.pawn:hover img {
+    transform: translateY(-4px) scale(1.08);
+    filter:
+        drop-shadow(0 4px 2px rgba(255,255,255,0.8))
+        drop-shadow(0 8px 5px rgba(0,0,0,0.5));
+}
+
+.pawnOp:hover img {
+    transform: translateY(-4px) scale(1.08);
+    filter:
+        invert(1)
+        drop-shadow(0 4px 2px rgba(255,100,100,0.7))
+        drop-shadow(0 8px 5px rgba(0,0,0,0.6));
+}
+.active {
+    border: 3px solid #35b2ff;
+    border-radius: 12px;
+
+    background: linear-gradient(145deg,
+            rgba(53, 178, 255, 0.22),
+            rgba(0, 110, 255, 0.08));
+
+    box-shadow:
+        0 0 5px #35b2ff,
+        0 0 12px rgba(53, 178, 255, 0.7),
+        inset 0 0 10px rgba(53, 178, 255, 0.2);
+
+    transform: scale(1.06);
+
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.gridElement {
+    position: relative;
+}
+
+.marker {
+    width: 2vh;
+    height: 2vh;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: radial-gradient(circle,
+            #d9ffdf 0%,
+            #39ff70 35%,
+            #00b83f 75%,
+            #00852e 100%);
+
+    border: 2px solid rgba(220, 255, 225, 0.9);
+
+    box-shadow:
+        0 0 5px #39ff70,
+        0 0 12px rgba(57, 255, 112, 0.8),
+        0 0 22px rgba(0, 255, 80, 0.45);
+
+    animation: markerPulse 1.2s ease-in-out infinite;
+
+    pointer-events: none;
+    z-index: 5;
+}
+
+@keyframes markerPulse {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(0.85);
+        box-shadow: 0 0 5px #39ff70, 0 0 10px rgba(57, 255, 112, 0.5);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        box-shadow: 0 0 10px #39ff70, 0 0 25px rgba(57, 255, 112, 0.9);
+        opacity: 1;
+    }
+}
+
+@keyframes markerPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(59, 255, 59, 0.8);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(59, 255, 59, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 255, 59, 0);
+    }
+}
+.danger {
+    border: 3px solid #ff2525;
+    border-radius: 12px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(255, 0, 0, 0.18),
+        rgba(120, 0, 0, 0.08)
+    );
+
+    box-shadow:
+        0 0 5px #ff2525,
+        0 0 12px rgba(255, 0, 0, 0.75),
+        0 0 24px rgba(255, 0, 0, 0.45),
+        inset 0 0 12px rgba(255, 0, 0, 0.2);
+
+    animation: dangerPulse 1s ease-in-out infinite;
+
+    z-index: 3;
+}
+
+@keyframes dangerPulse {
+    0%, 100% {
+        box-shadow:
+            0 0 5px #ff2525,
+            0 0 10px rgba(255, 0, 0, 0.5),
+            inset 0 0 5px rgba(255, 0, 0, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 10px #ff2525,
+            0 0 22px rgba(255, 0, 0, 0.9),
+            0 0 35px rgba(255, 0, 0, 0.5),
+            inset 0 0 12px rgba(255, 0, 0, 0.3);
+    }
+}
+@keyframes dangerPulse {
+    0% {
+        border-color: red;
+        box-shadow: 0 0 5px red;
+    }
+
+    50% {
+        border-color: transparent;
+        box-shadow: 0 0 15px red;
+    }
+
+    100% {
+        border-color: red;
+        box-shadow: 0 0 5px red;
+    }
+}
+
+#FinshiedPawns,
+#OpsFinishedPawns {
+    position: absolute;
+
+    width: 21vw;
+    height: 21vh;
+
+    padding: 14px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: center;
+    gap: 9px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(255,255,255,0.08),
+            transparent 55%
+        ),
+        linear-gradient(145deg, #222222, #0c0c0c);
+
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,0.08),
+        inset 0 -8px 20px rgba(0,0,0,0.4),
+        0 12px 30px rgba(0,0,0,0.5);
+
+    backdrop-filter: blur(12px);
+
+    transition: 0.3s ease;
+}
+
+/* White captured panel */
+#FinshiedPawns {
+    top: 3%;
+    right: 3%;
+
+    border-top: 3px solid #e8d7b8;
+
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,0.08),
+        0 0 18px rgba(232,215,184,0.08),
+        0 12px 30px rgba(0,0,0,0.5);
+}
+
+/* Red captured panel */
+#OpsFinishedPawns {
+    bottom: 3%;
+    right: 3%;
+
+    border-top: 3px solid #d40000;
+
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,0.08),
+        0 0 18px rgba(212,0,0,0.12),
+        0 12px 30px rgba(0,0,0,0.5);
+}
+
+/* Panel hover */
+#FinshiedPawns:hover,
+#OpsFinishedPawns:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* Header */
+.capturedHeader {
+    width: 100%;
+    min-height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-bottom: 8px;
+    margin-bottom: 5px;
+
+    color: #d6d6d6;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.capturedIcon {
+    font-size: 20px;
+    color: #e8d7b8;
+
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+#OpsFinishedPawns .capturedIcon {
+    color: #ff4242;
+    text-shadow: 0 0 10px rgba(255,0,0,0.5);
+}
+
+/* Captured piece images */
+#FinshiedPawns .pawn,
+#OpsFinishedPawns .pawnOp {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,0.06);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    transition: 0.2s ease;
+}
+
+#FinshiedPawns .pawn:hover,
+#OpsFinishedPawns .pawnOp:hover {
+    transform: scale(1.12);
+
+    background: rgba(255,255,255,0.12);
+}
+#OpsFinishedPawns>div {
+    width: 5vh;
+    height: 5vh;
+}
+
+#FinshiedPawns>div {
+    width: 5vh;
+    height: 5vh;
+}
